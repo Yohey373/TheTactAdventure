@@ -8,8 +8,9 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
     private SpriteRenderer playerSpriteRenderer;
     private Rigidbody2D playerRigidbody2D;
     private float speedPower = 2.0f;
+    [SerializeField]
     private bool isGround = false;
-    private float characterUnderPosYDiff = -1.1f;
+    private float characterUnderPosYDiff = -0.5f;
     
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,7 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
         var pos = transform.position;
         pos.y += characterUnderPosYDiff;
         // Cast a ray straight down
-        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, Vector2.down, 1f);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, Vector2.down, 0.1f);
         if (hits.Count() == 0)
         {
             isGround = false;
@@ -37,7 +38,18 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
         {
             if (hit.collider.tag == "Ground")
             {
-                isGround = true;
+                if(!isGround)
+                { 
+                    isGround = true;
+                }
+                break;
+            }    
+            else
+            {    
+                if (isGround)
+                {
+                    isGround = false;
+                }
             }
         }
 
@@ -51,6 +63,21 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
         {
             return;
         }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            SetAnimation(Animation_Attack);
+            return;
+        }
+
+        // ã•ûŒü‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç
+        if (Input.GetAxis("Vertical") > 0)
+        {
+            playerRigidbody2D.AddForce(Vector2.up * 8f);
+            SetAnimation(Animation_Jump);
+            return;
+        }
+
         if (Input.GetAxis("Horizontal") == 0)
         {
             if (isGround)
@@ -75,6 +102,8 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
             playerRigidbody2D.velocity = Vector2.left * speedPower;
             playerSpriteRenderer.flipX = true;
         }
+
+        
 
     }
 

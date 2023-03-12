@@ -8,6 +8,8 @@ public class CharacterAnimationControllerBase : MonoBehaviour
 
     public const string Animation_Idle = "Idle";
     public const string Animation_Walk = "Walk";
+    public const string Animation_Jump = "Jump";
+    public const string Animation_Attack = "Attack";
 
     //protected bool isGround = false;
 
