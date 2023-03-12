@@ -5,19 +5,17 @@ using UnityEngine;
 
 public class PlayerCharacterAnimationController : CharacterAnimationControllerBase
 {
-    private SpriteRenderer playerSpriteRenderer;
     private Rigidbody2D playerRigidbody2D;
     private float speedPower = 2.0f;
     [SerializeField]
     private bool isGround = false;
     private float characterUnderPosYDiff = -0.5f;
-    public GameObject AttackNote;
+
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        // Ž©•ª‚ÌSpriteRenderer‚ÌŽæ“¾
-        playerSpriteRenderer = this.GetComponent<SpriteRenderer>();
+        base.Start();
         playerRigidbody2D = this.GetComponent<Rigidbody2D>();
 
         SetAnimation(Animation_Idle);
@@ -67,7 +65,6 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Space");
             SetAnimation(Animation_Attack);
             return;
         }
@@ -103,24 +100,6 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
         {
             playerRigidbody2D.velocity = Vector2.left * speedPower;
             playerSpriteRenderer.flipX = true;
-        }
-
-    }
-    
-    public void CreateMusicNote()
-    {
-        var thisTransform = this.transform;
-        var note = Instantiate(AttackNote, thisTransform);
-
-        if (playerSpriteRenderer.flipX)
-        {
-            note.transform.position += Vector3.left*2;
-            note.GetComponent<Rigidbody2D>().AddForce(Vector2.left *100);
-        }
-        else
-        {
-            note.transform.position += Vector3.right*2;
-            note.GetComponent<Rigidbody2D>().AddForce(Vector2.right *100);
         }
 
     }

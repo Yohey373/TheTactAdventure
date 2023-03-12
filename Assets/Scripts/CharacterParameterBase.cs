@@ -39,4 +39,9 @@ public class CharacterParameterBase : MonoBehaviour
         hitPoint+= upperLevel;
     }
 
+    public void Revival()
+    {
+        hitPoint = maxHitPoint;
+    }
+
 }

@@ -13,10 +13,9 @@ public class EnemyCharacterAnimationController : CharacterAnimationControllerBas
     public EnemyPlayerSearch EnemyPlayerSearch;
     
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        // Ž©•ª‚ÌSpriteRenderer‚ÌŽæ“¾
-        enemySpriteRenderer = this.GetComponent<SpriteRenderer>();
+        base.Start();
         enemyRigidbody2D = this.GetComponent<Rigidbody2D>();
 
         SetAnimation(Animation_Idle);
@@ -25,12 +24,17 @@ public class EnemyCharacterAnimationController : CharacterAnimationControllerBas
     // Update is called once per frame
     void Update()
     {
+        if (isAttackAnimation)
+        {
+            return;
+        }
+
         if (!EnemyPlayerSearch.IsSearchPlayer)
         {
             SetAnimation(Animation_Idle);
             return;
         }
-        if (EnemyPlayerSearch.PlayerCharacterDistance <0)
+        /*if (EnemyPlayerSearch.PlayerCharacterDistance <0)
         {
             enemyRigidbody2D.velocity = Vector2.right * speedPower;
             SetAnimation(Animation_Walk);
@@ -41,6 +45,20 @@ public class EnemyCharacterAnimationController : CharacterAnimationControllerBas
             enemyRigidbody2D.velocity = Vector2.left * speedPower;
             SetAnimation(Animation_Walk);
             enemySpriteRenderer.flipX = true;
+        }*/
+
+        if (EnemyPlayerSearch.PlayerCharacterDistance < 0)
+        {
+            //enemyRigidbody2D.velocity = Vector2.right * speedPower;
+            SetAnimation(Animation_Attack);
+            playerSpriteRenderer.flipX = false;
         }
+        else
+        {
+            //enemyRigidbody2D.velocity = Vector2.left * speedPower;
+            SetAnimation(Animation_Attack);
+            playerSpriteRenderer.flipX = true;
+        }
+
     }
 }
