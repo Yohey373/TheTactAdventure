@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerCharacterAnimationController : CharacterAnimationControllerBase
@@ -26,15 +27,20 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
         var pos = transform.position;
         pos.y += characterUnderPosYDiff;
         // Cast a ray straight down
-        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.down, 1f);
-        if (hit.collider != null && hit.collider.tag == "Ground")
-        {
-            isGround = true;
-        }
-        else
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, Vector2.down, 1f);
+        if (hits.Count() == 0)
         {
             isGround = false;
+            return;
         }
+        foreach (var hit in hits)
+        {
+            if (hit.collider.tag == "Ground")
+            {
+                isGround = true;
+            }
+        }
+
 
     }
 
