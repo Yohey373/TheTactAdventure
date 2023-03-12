@@ -11,7 +11,8 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
     [SerializeField]
     private bool isGround = false;
     private float characterUnderPosYDiff = -0.5f;
-    
+    public GameObject AttackNote;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,13 +60,14 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
     void Update()
     {
         // 空中にいる間は何もできない。もしくは降下モーションを出す
-        if (!isGround)
+        if (!isGround || isAttackAnimation)
         {
             return;
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Space");
             SetAnimation(Animation_Attack);
             return;
         }
@@ -103,7 +105,23 @@ public class PlayerCharacterAnimationController : CharacterAnimationControllerBa
             playerSpriteRenderer.flipX = true;
         }
 
-        
+    }
+    
+    public void CreateMusicNote()
+    {
+        var thisTransform = this.transform;
+        var note = Instantiate(AttackNote, thisTransform);
+
+        if (playerSpriteRenderer.flipX)
+        {
+            note.transform.position += Vector3.left*2;
+            note.GetComponent<Rigidbody2D>().AddForce(Vector2.left *100);
+        }
+        else
+        {
+            note.transform.position += Vector3.right*2;
+            note.GetComponent<Rigidbody2D>().AddForce(Vector2.right *100);
+        }
 
     }
 

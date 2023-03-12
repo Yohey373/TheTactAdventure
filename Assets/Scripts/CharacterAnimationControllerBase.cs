@@ -11,6 +11,8 @@ public class CharacterAnimationControllerBase : MonoBehaviour
     public const string Animation_Jump = "Jump";
     public const string Animation_Attack = "Attack";
 
+    protected bool isAttackAnimation = false;
+
     //protected bool isGround = false;
 
     protected void SetAnimation(string animationName)
@@ -22,6 +24,20 @@ public class CharacterAnimationControllerBase : MonoBehaviour
         }
 
         Animator.Play(animationName, 0);
+
+        if (animationName.Equals(Animation_Attack))
+        {
+            StartCoroutine(StartWaitAnimation());
+        }
+
+    }
+
+    IEnumerator StartWaitAnimation()
+    {
+        isAttackAnimation = true;
+        yield return new WaitWhile(()=> Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
+        yield return new WaitUntil(()=> Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
+        isAttackAnimation = false;
     }
 
 }
